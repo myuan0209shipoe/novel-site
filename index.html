@@ -1,0 +1,187 @@
+<!--
+README: 小说存放静态网页模板（仅用于您对内容拥有版权或内容属公有领域时）
+包含:
+  - 单文件 HTML 模板（结构化数据 JSON-LD，章节分页）均为AI生成
+  - sitemap.xml 示例
+  - robots.txt 建议内容
+  - 简单 RSS/Atom 模板
+  - Nginx 配置片段（设置 CORS、缓存、内容类型）
+  - Express.js 简易 API 示例（用于提供纯文本 / JSON 接口）
+法律注意: 请勿未经许可发布受版权保护的小说。请仅发布您拥有权利的内容或公有领域作品。
+-->
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>示例小说标题 — 作者名</title>
+  <meta name="description" content="示例小说简介。请仅发布您有版权或公有领域的作品。">
+
+  <!-- Open Graph / 社交卡片 -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="示例小说标题">
+  <meta property="og:description" content="示例小说简介。">
+  <meta property="og:url" content="https://example.com/novel/slug/">
+
+  <!-- 结构化数据 JSON-LD, 使用 schema.org 的 CreativeWork / Book / Chapter -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Book",
+    "name": "示例小说标题",
+    "author": { "@type": "Person", "name": "作者名" },
+    "datePublished": "2025-12-02",
+    "inLanguage": "zh-CN",
+    "url": "https://example.com/novel/slug/",
+    "workExample": [
+      {"@type":"Chapter","name":"第1章 标题","url":"https://example.com/novel/slug/chapter-1","position":1},
+      {"@type":"Chapter","name":"第2章 标题","url":"https://example.com/novel/slug/chapter-2","position":2}
+    ],
+    "license": "https://creativecommons.org/licenses/by/4.0/"
+  }
+  </script>
+
+  <!-- canonical -->
+  <link rel="canonical" href="https://example.com/novel/slug/">
+
+  <!-- RSS feed -->
+  <link rel="alternate" type="application/rss+xml" title="示例小说更新" href="/novel/slug/feed.xml">
+
+  <style>
+    /* 轻量样式，仅供示例 */
+    body{max-width:800px;margin:2rem auto;font-family: system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue","PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",sans-serif;line-height:1.7;padding:0 1rem}
+    header h1{font-size:1.6rem;margin:.2rem 0}
+    .meta{color:#666;font-size:.9rem;margin-bottom:1rem}
+    .chapter{margin:2rem 0}
+    pre.plain{white-space:pre-wrap;word-break:break-word;background:#f8f8f8;padding:1rem;border-radius:6px}
+    nav.chapter-nav{display:flex;justify-content:space-between}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>示例小说标题</h1>
+    <div class="meta">作者：作者名 • 状态：完结 • 语言：中文 • 许可：CC BY 4.0（示例）</div>
+    <p>请确保您对发布的文本拥有必要权利；若为公有领域或您本人创作，请在许可处明确标注。</p>
+  </header>
+
+  <!-- 列表页：章节目录（每章节单独 URL 有利于爬虫抓取与索引） -->
+  <section id="toc">
+    <h2>目录</h2>
+    <ol>
+      <li><a href="/novel/slug/chapter-1">第1章 标题</a></li>
+      <li><a href="/novel/slug/chapter-2">第2章 标题</a></li>
+      <!-- 按需增加章节链接 -->
+    </ol>
+  </section>
+
+  <!-- 单章节示例（实际部署时每章节单独 HTML 或静态路径） -->
+  <article id="chapter-1" class="chapter" itemscope itemtype="https://schema.org/Chapter">
+    <h2 itemprop="name">第1章 标题</h2>
+    <div class="meta">发布时间：2025-12-02</div>
+    <div itemprop="text" class="plain">
+      <!-- 在这里粘贴小说正文；保持原始文本格式，爬虫/AI 能更容易抓取 -->
+      这是小说的示例正文。将整章作为纯文本放在此处，或放在独立的 /novel/slug/chapter-1.txt 纯文本文件中以便直接抓取。
+    </div>
+
+    <nav class="chapter-nav">
+      <a href="/novel/slug/chapter-0">上一章</a>
+      <a href="/novel/slug/chapter-2">下一章</a>
+    </nav>
+  </article>
+
+  <footer>
+    <p>联系/版权声明：如果你不是版权方，请勿转载。如需 DMCA 下架，请联系 webmaster@example.com。</p>
+  </footer>
+</body>
+</html>
+
+
+<!--
+sitemap.xml 示例 (放在 /sitemap.xml)
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://example.com/novel/slug/</loc>
+    <lastmod>2025-12-02</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://example.com/novel/slug/chapter-1</loc>
+    <lastmod>2025-12-02</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://example.com/novel/slug/chapter-2</loc>
+    <lastmod>2025-12-02</lastmod>
+    <priority>0.8</priority>
+  </url>
+</urlset>
+
+robots.txt 建议内容 (放在 /robots.txt)
+User-agent: *
+Allow: /
+Sitemap: https://example.com/sitemap.xml
+
+注意: 如果你想阻止某些爬虫或速率过快的爬虫，请用 Crawl-delay 或通过服务器端限流/防爬策略。
+
+RSS / Atom 简单模板 (feed.xml 或 feed.atom)
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>示例小说更新</title>
+    <link>https://example.com/novel/slug/</link>
+    <description>章节更新通知</description>
+    <item>
+      <title>第2章 标题</title>
+      <link>https://example.com/novel/slug/chapter-2</link>
+      <pubDate>Tue, 02 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://example.com/novel/slug/chapter-2</guid>
+    </item>
+  </channel>
+</rss>
+
+Nginx 示例配置片段 (用于静态站点，设置 CORS 与缓存头)
+server {
+  listen 80;
+  server_name example.com;
+  root /var/www/example.com/html;
+
+  location / {
+    try_files $uri $uri/ =404;
+  }
+
+  # 允许跨域读取纯文本 / API
+  location ~* \\.(txt|json|xml)$ {
+    add_header Access-Control-Allow-Origin "*";
+    add_header Cache-Control "public, max-age=86400";
+    try_files $uri =404;
+  }
+
+  # 安全头（示例）
+  add_header X-Content-Type-Options nosniff;
+  add_header X-Frame-Options SAMEORIGIN;
+}
+
+Express.js 简单 API 示例 (提供章节纯文本与 JSON-LD 接口)
+// app.js
+const express = require('express');
+const path = require('path');
+const app = express();
+
+// 提供纯文本章节，便于爬虫直接抓取
+app.get('/api/novel/:slug/:chapter.txt', (req,res)=>{
+  const file = path.join(__dirname,'public','novel',req.params.slug,req.params.chapter+'.txt');
+  res.set('Content-Type','text/plain; charset=utf-8');
+  res.sendFile(file);
+});
+
+// 提供 JSON-LD 信息供机器读取
+app.get('/api/novel/:slug/meta.json', (req,res)=>{
+  const meta = { name: '示例小说标题', author: '作者名', chapters: [ {title:'第1章', url:'/novel/slug/chapter-1'}, {title:'第2章', url:'/novel/slug/chapter-2'} ] };
+  res.json(meta);
+});
+
+app.listen(3000, ()=>console.log('Listening on 3000'));
+
+-->
